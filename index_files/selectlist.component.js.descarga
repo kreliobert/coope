@@ -1,0 +1,30 @@
+﻿window.select2Component = {
+    init: function (id, enableSearch) {
+         
+        if (enableSearch) {
+            $('#' + id).select2();
+        } else {
+            $('#' + id).select2({
+                minimumResultsForSearch: Infinity
+            });
+        }
+    },
+    onChange: function (id, dotnetHelper, nameFunc) {
+        $('#' + id).on('select2:select', function (e) {
+            dotnetHelper.invokeMethodAsync(nameFunc, $('#' + id).val());
+        });
+    },
+    triggerChange: function (id, val, enableSearch) {
+        $('#' + id).val(val);
+
+        if (enableSearch) {
+            $('#' + id).select2().trigger('change');
+        }
+        else
+        {
+            $('#' + id).select2({
+                minimumResultsForSearch: Infinity
+            }).trigger('change');
+        }
+    }
+}

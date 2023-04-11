@@ -1,0 +1,44 @@
+﻿var reCaptchaScriptLoaded = null;
+
+function waitScriptIsLoaded(resolve) {
+    if (typeof (grecaptcha) !== 'undefined' && typeof (grecaptcha.render) !== 'undefined') {
+        resolve();
+    } else {
+        setTimeout(function () {
+            waitScriptIsLoaded(resolve);
+        }, 100)
+    }
+}
+
+function reCaptchaInitialize() {
+    const scripts = Array.from(document.getElementsByTagName('script'));
+
+    if (!scripts.some(s => (s.src || '').startsWith('https://www.google.com/recaptcha/api.js'))) {
+        const script = document.createElement('script');
+        script.src = 'https://www.google.com/recaptcha/api.js?render=explicit';
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+    }    
+    if (reCaptchaScriptLoaded === null)
+        reCaptchaScriptLoaded = new Promise(waitScriptIsLoaded);
+
+    return reCaptchaScriptLoaded;
+}
+
+function reCaptchaRender(DotNet, selector, siteKey) {
+    return grecaptcha.render(selector, {
+        'sitekey': siteKey,
+        'theme': 'light',
+        'callback': function (response) {
+            DotNet.invokeMethodAsync('CallbackOnSuccess', response);
+        },
+        'expired-callback': function () {
+            DotNet.invokeMethodAsync('CallbackOnExpired', response);
+        }
+    });
+}
+
+function reCaptchaGetResponse(widgedId) {
+    return grecaptcha.getResponse(widgedId);
+}

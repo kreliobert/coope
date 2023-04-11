@@ -1,0 +1,24 @@
+﻿window.topbar = {
+    toggle: function () {
+        $("body").toggleClass("sidebar-toggled");
+        $(".sidebar").toggleClass("toggled");
+        if ($(".sidebar").hasClass("toggled")) {
+            $('#accordionSidebar').hide();
+            $('.sidebar .collapse').collapse('hide');
+        } else {
+            $('#accordionSidebar').show();
+        };
+    }
+}
+
+window.navMenu = {
+    clickItem: function () {
+        if ($(window).width() < 768) {
+            $("body").addClass("sidebar-toggled");
+            $(".sidebar").addClass("toggled");
+            if ($(".sidebar").hasClass("toggled")) {
+                $('.sidebar .collapse').collapse('hide');
+            };
+        }
+    }
+}

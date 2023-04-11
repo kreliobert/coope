@@ -1,0 +1,26 @@
+﻿window.security = {
+
+    generateSha512String: function (value) {
+        if (value) {
+            return sha512(value).toUpperCase();
+        }
+
+        return null;
+    },
+
+    encryptText: function (value) {
+
+        try {
+            if (!value)
+                return null;
+
+            var pubKey = document.getElementById("pubkey").value;
+            var encrypt = new JSEncrypt();
+            encrypt.setPublicKey(pubKey);
+            return encrypt.encrypt(value);
+
+        } catch (e) {
+            return null;
+        }
+    }
+}
